@@ -1,5 +1,4 @@
 import { Fragment } from 'react'
-import * as React from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import {
   CloudUploadIcon,
@@ -14,12 +13,14 @@ import {
 import { ChevronRightIcon, ExternalLinkIcon } from '@heroicons/react/solid'
 import { Disclosure, Menu } from '@headlessui/react'
 import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect } from 'react';
+import {useRouter} from 'next/router'
 
 const navigation = [
   { name: 'Product', href: '#feature' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
+  { name: 'Blog', href: '#' },
+  { name: 'About', href: '#' },
+  { name: 'Contact', href: '#' },
 ]
 const features = [
   {
@@ -206,6 +207,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
+
+
+
 export default function Example() {
   const motionVariants = {
     hidden: { opacity: 0 },
@@ -214,8 +218,8 @@ export default function Example() {
       opacity: 1,
       transition: {
         type: "tween",
-        duration: 0.4,
-        delay: 0.2,
+        duration: 0.5,
+        delay: 0.3,
       },
     },
     exit: {
@@ -227,6 +231,15 @@ export default function Example() {
       },
     },
   };
+
+  useEffect(() => {
+    const smoothScroll = require('smooth-scroll')('a[href*="#"]', {
+      speed: 800,
+      updateURL: true,
+      popstate: true
+    });
+
+  }); 
   return (
     <div className="bg-white">
       <div className="relative overflow-hidden">
@@ -249,12 +262,13 @@ export default function Example() {
                 </div>
                 <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="flex-shrink-0 flex items-center">
-                    <h1 className='text-nft-yellow-400 font-extrabold tracking-widest'>NFTSec</h1>
+                    <h1 className='text-nft-yellow-400 font-extrabold tracking-widest'>NFTSEC</h1>
                   </div>
                   <div className="hidden sm:block sm:ml-6">
                     <div className="flex space-x-4">
                       {navigation.map((item) => (
                         <a
+                          data-scroll
                           key={item.name}
                           href={item.href}
                           className={classNames(
@@ -296,6 +310,8 @@ export default function Example() {
       </Disclosure>
 
         <main>
+
+          {/**BANNER */}
           <div className="pt-10 bg-gray-900 sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
             <div className="mx-auto max-w-7xl lg:px-8">
               <div className="lg:grid lg:grid-cols-2 lg:gap-8">
@@ -384,7 +400,9 @@ export default function Example() {
             initial="hidden"
             whileInView="show"
             exit="exit"
-            className="relative bg-gray-50 pt-16 sm:pt-24 lg:pt-32">
+            className="relative bg-gray-50 pt-16 sm:pt-24 lg:pt-32"
+            id='feature'
+            >
           
             <div className="mx-auto max-w-md px-4 text-center sm:px-6 sm:max-w-3xl lg:px-8 lg:max-w-7xl">
               <div>
