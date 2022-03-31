@@ -13,8 +13,10 @@ import {
 import { ChevronRightIcon, ExternalLinkIcon } from '@heroicons/react/solid'
 import { Disclosure, Menu } from '@headlessui/react'
 import { motion, AnimatePresence } from "framer-motion"
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {useRouter} from 'next/router'
+import { Parallax } from 'react-scroll-parallax'
+import Rellax from "rellax";
 
 const navigation = [
   { name: 'Product', href: '#feature' },
@@ -206,40 +208,52 @@ const footerNavigation = {
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
+let easing = [0.175, 0.85, 0.42, 0.96];
 
+const motionVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "tween",
+      duration: 0.6,
+      delay: 0.2,
+    },
+  },
+  exit: {
+    y: "140vh",
+    transition: {
+      type: "tween",
+      duration: 0.4,
+      delay: 0.2,
+    },
+  },
+};
 
+const imgVariants = {
+  exit: { y: 250, opacity: 0, transition: { duration: 0.5, ease: easing } },
+  enter: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: easing
+    }
+  }
+};
 
 
 export default function Example() {
-  const motionVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "tween",
-        duration: 0.5,
-        delay: 0.3,
-      },
-    },
-    exit: {
-      y: "140vh",
-      transition: {
-        type: "tween",
-        duration: 0.4,
-        delay: 0.2,
-      },
-    },
-  };
+
+  const rellaxRef = useRef();
 
   useEffect(() => {
-    const smoothScroll = require('smooth-scroll')('a[href*="#"]', {
-      speed: 800,
-      updateURL: true,
-      popstate: true
+    new Rellax(".banner_rellax", { // <---- Via class name
+      speed: 4
     });
+  }, []);
 
-  }); 
   return (
     <div className="bg-white">
       <div className="relative overflow-hidden">
@@ -315,6 +329,7 @@ export default function Example() {
           <div className="pt-10 bg-gray-900 sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
             <div className="mx-auto max-w-7xl lg:px-8">
               <div className="lg:grid lg:grid-cols-2 lg:gap-8">
+                {/**LEFT PANNEL */}
                 <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
                   <div className="lg:py-24">
                     <a
@@ -379,14 +394,25 @@ export default function Example() {
                     </div>
                   </div>
                 </div>
+                {/**RIGHT PANNEL */}
                 <div className="mt-12 -mb-16 sm:-mb-48 lg:m-0 lg:relative">
-                  <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
+                  <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0" >
                     {/* Illustration taken from Lucid Illustrations: https://lucid.pixsellz.io/ */}
+                    
                     <img
-                      className="w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
+                      className="banner_rellax w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
                       src="https://tailwindui.com/img/component-images/cloud-illustration-teal-cyan.svg"
                       alt=""
                     />
+                    
+                    {/*<motion.img
+                      className="animate w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
+                      src="https://tailwindui.com/img/component-images/cloud-illustration-teal-cyan.svg"
+                      alt=""
+                      variants={imgVariants}
+                      initial="exit" animate="enter" exit="exit" 
+                    />*/}
+                  
                   </div>
                 </div>
               </div>
