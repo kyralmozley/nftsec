@@ -210,154 +210,161 @@ function classNames(...classes) {
 }
 let easing = [0.175, 0.85, 0.42, 0.96];
 
-const motionVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: "tween",
-      duration: 0.6,
-      delay: 0.2,
-    },
-  },
-  exit: {
-    y: "140vh",
-    transition: {
-      type: "tween",
-      duration: 0.4,
-      delay: 0.2,
-    },
-  },
-};
 
-const imgVariants = {
-  exit: { y: 250, opacity: 0, transition: { duration: 0.5, ease: easing } },
-  enter: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.5,
-      ease: easing
-    }
-  }
-};
 
 
 export default function Example() {
 
+  const motionVariants = {
+    hidden: { 
+      opacity: 0,
+    },
+    show: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "tween",
+        duration: 1,
+        delay: 0.2,
+      },
+    },
+    exit: {
+      y: "140vh",
+      transition: {
+        type: "tween",
+        duration: 0.8,
+        delay: 0.2,
+      },
+    },
+  };
   const rellaxRef = useRef();
 
   useEffect(() => {
     new Rellax(".banner_rellax", { // <---- Via class name
-      speed: 4
+      speed: 5
+    });
+    const smoothScroll = require('smooth-scroll')('a[href*="#"]', {
+      speed: 800,
+      updateURL: true,
+      popstate: true
     });
   }, []);
 
   return (
-    <div className="bg-white">
-      <div className="relative overflow-hidden">
-        {/** NAV BAR*/}
-        <Disclosure as="nav" className="bg-nft-blue-800">
-        {({ open }) => (
-          <>
-            <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-              <div className="relative flex items-center justify-between h-16">
-                <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                  {/* Mobile menu button*/}
-                  <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+    <div className="relative overflow-hidden bg-gradient-to-b from-zinc-100 to-zinc-300">
+      <Popover as="header" className="relative">
+        <div className="pt-6">
+          <nav
+            className="relative max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6"
+            aria-label="Global"
+          >
+            <div className="flex items-center flex-1">
+              <div className="flex items-center justify-between w-full md:w-auto">
+                <a href="#">
+                  <span className="sr-only">Workflow</span>
+                  <h1 className='text-indigo-600 font-extrabold tracking-widest text-2xl'>NFTSEC</h1>
+                </a>
+                <div className="-mr-2 flex items-center md:hidden">
+                  <Popover.Button className="bg-gray-900 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-800 focus:outline-none focus:ring-2 focus-ring-inset focus:ring-white">
                     <span className="sr-only">Open main menu</span>
-                    {open ? (
-                      <XIcon className="block h-6 w-6" aria-hidden="true" />
-                    ) : (
-                      <MenuIcon className="block h-6 w-6" aria-hidden="true" />
-                    )}
-                  </Disclosure.Button>
+                    <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                  </Popover.Button>
                 </div>
-                <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-                  <div className="flex-shrink-0 flex items-center">
-                    <h1 className='text-nft-yellow-400 font-extrabold tracking-widest'>NFTSEC</h1>
-                  </div>
-                  <div className="hidden sm:block sm:ml-6">
-                    <div className="flex space-x-4">
-                      {navigation.map((item) => (
-                        <a
-                          data-scroll
-                          key={item.name}
-                          href={item.href}
-                          className={classNames(
-                            item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                            'px-3 py-2 rounded-md text-sm font-medium'
-                          )}
-                          aria-current={item.current ? 'page' : undefined}
-                        >
-                          {item.name}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                
               </div>
-            </div>
 
-            <Disclosure.Panel className="sm:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1">
+            </div>
+            <div className="hidden md:flex md:items-center md:space-x-6">
                 {navigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as="a"
-                    href={item.href}
-                    className={classNames(
-                      item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'block px-3 py-2 rounded-md text-base font-medium'
-                    )}
-                    aria-current={item.current ? 'page' : undefined}
+                  <a key={item.name} href={item.href} 
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-zinc-700 bg-transparent hover:bg-gray-200"
                   >
                     {item.name}
-                  </Disclosure.Button>
+                  </a>
                 ))}
+            </div>
+          </nav>
+        </div>
+
+        <Transition
+          as={Fragment}
+          enter="duration-150 ease-out"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="duration-100 ease-in"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <Popover.Panel focus className="absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top md:hidden">
+            <div className="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
+              <div className="px-5 pt-4 flex items-center justify-between">
+                <div>
+                  <h1 className='text-indigo-600 font-extrabold tracking-widest'>NFTSEC</h1>
+                </div>
+                <div className="-mr-2">
+                  <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-600">
+                    <span className="sr-only">Close menu</span>
+                    <XIcon className="h-6 w-6" aria-hidden="true" />
+                  </Popover.Button>
+                </div>
               </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
-
-        <main>
-
-          {/**BANNER */}
-          <div className="pt-10 bg-gray-900 sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
-            <div className="mx-auto max-w-7xl lg:px-8">
-              <div className="lg:grid lg:grid-cols-2 lg:gap-8">
-                {/**LEFT PANNEL */}
-                <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
-                  <div className="lg:py-24">
+              <div className="pt-5 pb-6">
+                <div className="px-2 space-y-1">
+                  {navigation.map((item) => (
                     <a
-                      href="#"
-                      className="inline-flex items-center text-white bg-black rounded-full p-1 pr-2 sm:text-base lg:text-sm xl:text-base hover:text-gray-200"
+                      key={item.name}
+                      href={item.href}
+                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50"
                     >
-                      <span className="px-3 py-0.5 text-white text-xs font-semibold leading-5 uppercase tracking-wide bg-gradient-to-r from-teal-500 to-cyan-600 rounded-full">
-                        We're hiring
-                      </span>
-                      <span className="ml-4 text-sm">Visit our careers page</span>
-                      <ChevronRightIcon className="ml-2 w-5 h-5 text-gray-500" aria-hidden="true" />
+                      {item.name}
                     </a>
-                    <motion.h1 
+                  ))}
+                </div>
+                <div className="mt-6 px-5">
+                  <a
+                    href="#"
+                    className="block text-center w-full py-3 px-4 rounded-md shadow bg-indigo-600 text-white font-medium hover:bg-indigo-700"
+                  >
+                    Start free trial
+                  </a>
+                </div>
+                <div className="mt-6 px-5">
+                  <p className="text-center text-base font-medium text-gray-500">
+                    Existing customer?{' '}
+                    <a href="#" className="text-gray-900 hover:underline">
+                      Login
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Popover.Panel>
+        </Transition>
+      </Popover>
+
+
+
+      <main>
+        <div className="pt-10 sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
+          <div className="lg:h-screen mx-auto max-w-7xl lg:px-8">
+            <div className="lg:grid lg:grid-cols-2 lg:gap-8">
+              {/**LEFT PANNEL */}
+              <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
+                <div className="lg:py-24">
+                  <motion.h1 
                       initial={{ scale: 0.6, opacity: 0 }} 
                       animate={{ scale: 1, opacity: 1 }} 
                       transition={{
                         opacity: { ease: "linear" },
                         layout: { duration: 0.3 }
                       }}
-                      className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
-                      <span className="block">A better way to</span>
-                      <span className="pb-3 block bg-clip-text text-transparent bg-gradient-to-r from-teal-200 to-cyan-400 sm:pb-5">
-                        ship web apps
+                      className="mt-4 text-5xl tracking-tight font-extrabold text-zinc-700 sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
+                      <span className="block">The safer way to </span>
+                      <span className="pb-3 block bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-500 sm:pb-5">
+                        discover NFTs.
                       </span>
                     </motion.h1>
-                    <p className="text-base text-gray-300 sm:text-xl lg:text-lg xl:text-xl">
-                      Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui Lorem cupidatat commodo. Elit
-                      sunt amet fugiat veniam occaecat fugiat.
+                    <p className="text-base text-zinc-500 sm:text-xl lg:text-lg xl:text-xl">
+                      Getting started in NFTs can be overwhelming. Our mission is to combine education with real-time analytics to enable everyone to stay alert to scams and protect their NFTs.
                     </p>
                     <div className="mt-10 sm:mt-12">
                       <form action="#" className="sm:max-w-xl sm:mx-auto lg:mx-0">
@@ -369,89 +376,103 @@ export default function Example() {
                             <input
                               id="email"
                               type="email"
-                              placeholder="Enter your email"
+                              placeholder="Enter your email for early access"
                               className="block w-full px-4 py-3 rounded-md border-0 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400 focus:ring-offset-gray-900"
                             />
                           </div>
                           <div className="mt-3 sm:mt-0 sm:ml-3">
                             <button
                               type="submit"
-                              className="block w-full py-3 px-4 rounded-md shadow bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-medium hover:from-teal-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400 focus:ring-offset-gray-900"
+                              className="block w-full py-3 px-4 rounded-md shadow bg-gradient-to-r from-blue-700 to-indigo-700 text-white font-medium hover:from-blue-900 hover:to-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400 focus:ring-offset-gray-900"
                             >
-                              Start free trial
+                              Notify Me
                             </button>
                           </div>
                         </div>
-                        <p className="mt-3 text-sm text-gray-300 sm:mt-4">
-                          Start your free 14-day trial, no credit card necessary. By providing your email, you agree to
-                          our{' '}
-                          <a href="#" className="font-medium text-white">
-                            terms of service
+                        <p className="mt-3 text-sm text-zinc-400 sm:mt-4">
+                        By providing your email, you agree to our {' '}
+                          <a href="#" className="font-medium text-indigo-400">
+                          terms of service
                           </a>
                           .
                         </p>
                       </form>
                     </div>
-                  </div>
                 </div>
+              </div>
                 {/**RIGHT PANNEL */}
-                <div className="mt-12 -mb-16 sm:-mb-48 lg:m-0 lg:relative">
-                  <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0" >
-                    {/* Illustration taken from Lucid Illustrations: https://lucid.pixsellz.io/ */}
-                    
-                    <img
-                      className="banner_rellax w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
-                      src="https://tailwindui.com/img/component-images/cloud-illustration-teal-cyan.svg"
-                      alt=""
-                    />
-                    
-                    {/*<motion.img
-                      className="animate w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
-                      src="https://tailwindui.com/img/component-images/cloud-illustration-teal-cyan.svg"
-                      alt=""
-                      variants={imgVariants}
-                      initial="exit" animate="enter" exit="exit" 
-                    />*/}
-                  
+              <div className="sm:max-w-3xl sm:px-6">
+                <div className="py-12 sm:relative sm:mt-12 sm:py-16 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+                  <div className="hidden lg:block">
+                    <div className="relative pl-4 -mr-40 sm:max-w-3xl sm:px-0 lg:max-w-none lg:h-full lg:pl-12 bg-cover" >
+                      <img
+                        className="right-0 inset-0"
+                        src="images/banner.png"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                  <div className="block lg:hidden">
+                    <div className="mx-auto max-w-md px-4" >
+                      <img
+                        className="w-full"
+                        src="images/blockchain.png"
+                        alt=""
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          
+          </div>            
+        </div>
+
+        <div className='bg-zinc-200 relative w-screen md:w-auto'>
           {/* Feature section with screenshot */}
-          <AnimatePresence>
+          <AnimatePresence
+            className=''>
           <motion.div 
             variants={motionVariants}
             initial="hidden"
             whileInView="show"
             exit="exit"
-            className="relative bg-gray-50 pt-16 sm:pt-24 lg:pt-32"
+            className="relative pt-16 sm:pt-24 lg:pt-32"
             id='feature'
             >
-          
-            <div className="mx-auto max-w-md px-4 text-center sm:px-6 sm:max-w-3xl lg:px-8 lg:max-w-7xl">
-              <div>
-                <h2 className="text-base font-semibold tracking-wider text-cyan-600 uppercase">Serverless</h2>
-                <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-                  No server? No problem.
-                </p>
-                <p className="mt-5 max-w-prose mx-auto text-xl text-gray-500">
-                  Phasellus lorem quam molestie id quisque diam aenean nulla in. Accumsan in quis quis nunc, ullamcorper
-                  malesuada. Eleifend condimentum id viverra nulla.
-                </p>
+            
+              <div className="mx-auto max-w-md px-4 text-center sm:px-6 sm:max-w-3xl lg:px-8 lg:max-w-7xl">
+                <div>
+                  <h2 className="text-base font-semibold tracking-wider text-cyan-600 uppercase">Serverless</h2>
+                  <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+                    No server? No problem.
+                  </p>
+                  <p className="mt-5 max-w-prose mx-auto text-xl text-gray-500">
+                    Phasellus lorem quam molestie id quisque diam aenean nulla in. Accumsan in quis quis nunc, ullamcorper
+                    malesuada. Eleifend condimentum id viverra nulla.
+                  </p>
+                </div>
+                <div className="mt-12 -mb-10 sm:-mb-24 lg:-mb-80">
+                  <img
+                    className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5"
+                    src="https://tailwindui.com/img/component-images/green-project-app-screenshot.jpg"
+                    alt=""
+                  />
+                </div>
               </div>
-              <div className="mt-12 -mb-10 sm:-mb-24 lg:-mb-80">
-                <img
-                  className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5"
-                  src="https://tailwindui.com/img/component-images/green-project-app-screenshot.jpg"
-                  alt=""
-                />
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
           </AnimatePresence>
+          </div>
           {/* Feature section with grid */}
+          <AnimatePresence
+          className='container mt-4 relative bg-gray-500 pt-16 sm:pt-24 lg:pt-32'>
+          <motion.div 
+            variants={motionVariants}
+            initial="hidden"
+            whileInView="show"
+            exit="exit"
+            className="relative pt-16 sm:pt-24 lg:pt-32"
+            id='feature'
+            >
           <div className="relative bg-white py-16 sm:py-24 lg:py-32">
             <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl" id='feature'>
               <h2 className="text-base font-semibold tracking-wider text-cyan-600 uppercase">Deploy faster</h2>
@@ -483,7 +504,8 @@ export default function Example() {
               </div>
             </div>
           </div>
-
+          </motion.div>
+          </AnimatePresence>
           {/* Testimonial section */}
           <div className="pb-16 bg-gradient-to-r from-teal-500 to-cyan-600 lg:pb-0 lg:z-10 lg:relative">
             <div className="lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-3 lg:gap-8">
@@ -622,7 +644,7 @@ export default function Example() {
             </div>
           </div>
         </main>
-        <footer className="bg-gray-50" aria-labelledby="footer-heading">
+      <footer className="bg-gray-50" aria-labelledby="footer-heading">
           <h2 id="footer-heading" className="sr-only">
             Footer
           </h2>
@@ -706,7 +728,7 @@ export default function Example() {
             </div>
           </div>
         </footer>
-      </div>
     </div>
+
   )
 }
